@@ -2,10 +2,10 @@
   <div class="official-song-list" v-if="Object.keys(songData).length!==0">
     <ul class="wrapper">
       <li v-for="item in songData.slice(0,limit)" class="song-item" @click="songClick(item)">
-        <h2 class="song-name">{{item.songname}}</h2>
+        <h2 class="song-name" :class="{check:item.isCheck}">{{item.songname}}</h2>
         <p class="song-singer">
           <img src="~assets/img/icon_vip.png" class="vip" v-if="item.pay.payplay===1">
-          <span class="singer-name">
+          <span class="singer-name" :class="{check:item.isCheck}">
             {{parseSinger(item.singer)+item.albumname}}
           </span>
         </p>
@@ -43,8 +43,8 @@
       loadMore() {
         this.limit += 10
       },
-      songClick(songData){
-        this.$bus.$emit('songClick',songData)
+      songClick(songData) {
+        this.$bus.$emit('songClick', songData)
       }
     }
   }
@@ -88,10 +88,15 @@
     height: 10px;
     width: 36px;
   }
+
   .load-more {
     padding: .05rem 0;
     text-align: center;
     font-size: .12rem;
     color: rgba(0, 0, 0, .7);
+  }
+
+  .song-name.check, .singer-name.check {
+    color: #22d59c;
   }
 </style>

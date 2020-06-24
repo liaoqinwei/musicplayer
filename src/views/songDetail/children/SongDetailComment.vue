@@ -2,7 +2,9 @@
   <section class="song-detail-comment" v-if="Object.keys(commentData).length !== 0">
     <h2 class="title">精彩评论</h2>
     <ul class="comment-list">
-      <song-detail-comment-item v-for="item in commentData.hot_comment.commentlist.slice(0,3)" :comment-data="item"/>
+      <song-detail-comment-item
+              v-for="item in commentData.hot_comment.commentlist.length>3?commentData.hot_comment.commentlist.slice(0,3):commentData.hot_comment.commentlist"
+              :comment-data="item"/>
     </ul>
     <div class="look-btn">
       查看全部评论
@@ -38,6 +40,7 @@
     text-align: center;
     font-size: .15rem;
   }
+
   .look-btn {
     margin: 10px auto 0;
     width: 2rem;

@@ -1,5 +1,5 @@
 <template>
-  <li class="lick-item">
+  <li class="lick-item" @click="lickSongClick">
     <div class="head-box">
       <img :src="getRealPath(150,descData.album.pmid)" class="head">
     </div>
@@ -25,7 +25,16 @@
         }
       }
     },
-    methods: {}
+    methods: {
+      lickSongClick() {
+        this.$router.replace('/songdetail/' + this.descData.id)
+      }
+    },
+    watch: {
+      '$route'(to, from) {
+        this.$bus.$emit('updateData', this.descData.id)
+      }
+    }
   }
 </script>
 
@@ -63,7 +72,7 @@
     margin-right: .1rem;
   }
 
-  .song-name,singer {
+  .song-name, singer {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

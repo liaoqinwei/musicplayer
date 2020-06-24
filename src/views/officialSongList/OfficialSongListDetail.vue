@@ -4,8 +4,7 @@
     <re-song-top-banner :top-data="{banner:listDetailData.dir_pic_url2}"/>
     <official-music-player :desc="listDetailData.desc"
                            :logo="listDetailData.headurl"
-                           :song-list="listDetailData.songlist"
-                           :songs-id="listDetailData.songids.split(',')"/>
+                           :song-list="listDetailData.songlist"/>
     <official-song-list :song-data="listDetailData.songlist"/>
 
     <div class="footer">
@@ -35,6 +34,9 @@
       // 发送请求，请求书
       getReSongListDetail(this.$route.params.id).then(result => {
         this.listDetailData = result.cdlist[0]
+        for (let index of this.listDetailData.songlist.keys()) {
+          this.$set(this.listDetailData.songlist[index],'isCheck',false)
+        }
       })
     },
     components: {

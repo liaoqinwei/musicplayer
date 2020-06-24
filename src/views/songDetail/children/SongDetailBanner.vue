@@ -113,13 +113,14 @@
           this.$refs.playMark.className = 'iconfont icon-bofang11'
           // 停止音乐的播放
           this.$refs.myVideo.pause()
-          this.$refs.myVideo.addEventListener('ended', () => {
-            // 音乐播放完成
-            this.playing = false
-          })
+          /* 音乐播放完成 */
+          this.$refs.myVideo.addEventListener('ended',this.playDown)
           // 停止定时器
           clearInterval(this.autoTimer)
         }
+      },
+      playDown(){
+        this.playing = false
       },
       /* 歌词追踪 */
       lyricTrack() {

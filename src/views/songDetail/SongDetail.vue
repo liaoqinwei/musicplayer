@@ -4,7 +4,7 @@
     <song-detail-banner :song-desc="songDetail.detail.data"
                         v-if="Object.keys(songDetail).length!==0"/>
     <!--猜你喜欢-->
-    <song-detail-like :like-list="songDetail.simsongs.data.songInfoList"/>
+    <song-detail-like :like-list="songDetail.simsongs.data.songInfoList" @updateData="updateData(id)"/>
     <!--大家都在听-->
     <song-detail-related :related-data="songDetail.gedan.data.vec_gedan"/>
     <!--歌手和专辑-->
@@ -54,6 +54,22 @@
         this.commentData = result
       })
     },
+    mounted() {
+      this.$bus.$on('updateData', (id) => {
+        this.updateData(id)
+      })
+    },
+    methods: {
+      updateData(id) {
+        getSongDesc(id).then(result => {
+          this.songDetail = result
+        })
+        getComment(id).then(result => {
+          this.commentData = result
+        })
+        console.log(111)
+      }
+    }
   }
 </script>
 
@@ -64,7 +80,7 @@
   }
 
   .more-btn {
-    margin: .3rem auto ;
+    margin: .3rem auto;
     background: rgb(34, 213, 156);
     text-align: center;
     width: 2.34rem;

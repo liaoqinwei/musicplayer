@@ -15,16 +15,18 @@
       <div class="player-btn" :class="{mark:isPlayer}" @click="playerClick(false)">
         <svg class="progress">
           <circle cx="17" cy="17" r="15.2" stroke="#31c27c" stroke-width="1.5" fill="none"
-                  stroke-dasharray="0.29 95.29"/>
+                  stroke-dasharray="0.29 95.29" ref="circle"/>
         </svg>
         <i class="iconfont icon-bofang my-bofang" ref="switchIcon"></i>
       </div>
       <div class="player-text" v-if="!curSong">播放全部</div>
       <div class="player-lyric" v-if="curSong">
         <h2 class="song-name">{{curSong.songname}}</h2>
-        <p class="lyric-box" v-if="isHaveLyric">
-          <span class="lyric" v-for="item in lyric">{{item.lyric}}</span>
-        </p>
+        <div class="lyric-box" v-if="isHaveLyric">
+          <ul class="lyric-wrapper" ref="lyricBox">
+            <li class="lyric" v-for="item in lyric">{{item.lyric}}</li>
+          </ul>
+        </div>
       </div>
       <a class="lick-music">
         <i class="iconfont icon-aixin my-aixin"></i>
@@ -59,20 +61,16 @@
           return []
         }
       },
-      songsId: {
-        type: Array,
-        default() {
-          return [];
-        }
-      }
     },
     data() {
       return {
         isFixed: false,
-        playerTop: 0,
-        isPlayer: false,
-        playing: false,
-        curSong: null,
+        playerTop: 0, // 顶端距离
+        isPlayer: false,// 是否第一次播放
+        playing: false,// 是否处于播放状态
+        curSong: null,// 当前播放是哪首歌
+        curIndex: 0,// 记录当前展示歌词的索引
+        curSongIndex: -1// 记录当前播放音乐在音乐列表的索引( 仅仅记录播放全部时的索引 )
       }
     },
     mixins: [parseLyric],
@@ -82,7 +80,14 @@
       this.$bus.$on('bannerDown', () => {
         this.playerTop = getTopDistance(this.$refs.playerBox)
       })
-      this.$bus.$on('songClick', this.playSong)
+      /* 点击歌曲事件 */
+      this.$bus.$on('songClick', item => {
+        // 如果有自动播放 先停止自动播放
+        if (this.curSongIndex !== -1) {
+          this.$refs.myAudio.removeEventListener('ended', this.nextPlayer)
+        }
+        this.playSong(item)
+      })
     },
     methods: {
       listenScroll(ev) {
@@ -94,10 +99,13 @@
         }
       },
       /* 点击播放按钮的逻辑 */
-      playerClick(switchMusic) {// 参数来判断是否是切歌
+      // 参数来判断是否是切歌
+      playerClick(switchMusic) {
         // 第一次点击播放  播放全部
         if (!this.isPlayer) {
-
+          // 循环songList 并播放 播放完成自定下一首
+          this.playAll()
+          this.playing = false
         }
         this.isPlayer = true
         this.playing = !this.playing
@@ -106,13 +114,14 @@
           this.$refs.switchIcon.className = 'iconfont icon-bofang1 my-bofang'
           this.$refs.switchIcon.style.color = '#31c27c'
           this.$refs.switchIcon.style.fontSize = '15px'
+          this.$refs.myAudio.play()
         } else {
           /* 没有播放 */
           this.$refs.switchIcon.className = 'iconfont icon-bofang my-bofang'
           this.$refs.switchIcon.style.fontSize = '22px'
+          /* 暂停音乐的播放 */
+          this.$refs.myAudio.pause()
         }
-
-
       },
       /* 播放歌曲的逻辑 */
       playSong(curSong) {
@@ -128,6 +137,10 @@
           return
         }
         this.curSong = curSong
+        // 让选中的歌曲有个标记 (选中的歌曲的名字为绿色)
+        let preSong = this.songList.find(item => item !== this.curSong && item.isCheck === true)
+        if (preSong) preSong.isCheck = false;
+        this.curSong.isCheck = true
 
         // 获取歌词
         this.getLyric(this.curSong.songmid)
@@ -135,11 +148,33 @@
         let url = `http://152.136.147.123:9090/song?id=${this.curSong.songmid}`
         this.$refs.myAudio.src = url
         this.$refs.myAudio.play()
+        // 设置播放完成然后将 图标改为暂停
+        this.$refs.myAudio.addEventListener('ended', this.playDown)
         this.playerClick(true) // 开启播放 切歌模式播放
-
+      },
+      playDown() {
+        this.playing = false
+        this.$refs.switchIcon.className = 'iconfont icon-bofang my-bofang'
+        this.$refs.switchIcon.style.fontSize = '22px'
       },
       /*歌词追踪*/
       lyricTrack() {
+        // 当前歌曲播放时间
+        let curTime = this.$refs.myAudio.currentTime.toFixed(0),
+            duration = isNaN(this.$refs.myAudio.duration) ? 0 : this.$refs.myAudio.duration,
+            ratio = isNaN(Number(curTime) / duration) ? 0 : Number(curTime) / duration;
+        /* 解析歌词中的时间 */
+        for (let item of this.lyric.entries()) {
+          let [index, {time}] = item;
+          time = this.parseTime(time)
+          if (time === Number(curTime)) {
+            this.curIndex = index
+            break
+          }
+        }
+        /* 控制圆圈旋转 */
+        this.$refs.circle.setAttribute('stroke-dasharray', `${(ratio * 95.29).toFixed(2)} 95.29`)
+        this.$refs.lyricBox.style.transform = `translateY(${-this.curIndex * 16.8}px)`
       },
       /* 获取歌词 */
       getLyric(id) {
@@ -147,6 +182,20 @@
         getLyric(id).then(result => {
           this.isHaveLyric = this.parseLyric(result.lyric)
         })
+      },
+      // 播放全部
+      playAll() {
+        if (this.curSongIndex === -1) {
+          this.curSongIndex++
+          this.playSong(this.songList[this.curSongIndex])
+
+          this.$refs.myAudio.addEventListener('ended', this.nextPlayer)
+        }
+      },
+      nextPlayer() {
+        // 播放完成 继续播放下一首
+        this.curSongIndex++
+        this.playSong(this.songList[this.curSongIndex])
       }
     }
   }
@@ -278,17 +327,31 @@
     height: 17px;
     line-height: 17px;
   }
-  .lyric{
+
+  .song-name {
+    font-weight: lighter;
+    font-size: 14px;
+  }
+
+  .lyric {
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-weight: lighter;
     width: 100%;
+    font-size: 11.5px;
+    color: #777;
   }
-  .player-lyric{
+
+  .player-lyric {
     width: 65%;
     padding-left: 5px;
     padding-right: 40px;
+  }
+
+  .lyric-wrapper {
+    transition: all .2s;
   }
 
 </style>
