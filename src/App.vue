@@ -1,32 +1,44 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <top-bar v-if="computedPath"/>
+    <nav-bar v-if="computedPath"/>
+    <keep-alive :exclude="/(.*)Detail$/">
+      <router-view/>
+    </keep-alive>
+    <footer-copyright v-if="computedPath"/>
   </div>
 </template>
 
+
+<script>
+  import NavBar from "components/content/navBar/NavBar";
+  import TopBar from "components/content/topBar/TopBar";
+  import FooterCopyright from "components/content/footer/FooterCopyright";
+
+  export default {
+    name: 'App',
+    components: {
+      TopBar,
+      NavBar,
+      FooterCopyright
+    },
+    computed: {
+      computedPath() {
+        let path = this.$route.fullPath
+        return (path.indexOf('recommend') + path.indexOf('tolist')) !== -2
+      }
+    }
+  }
+</script>
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+  @import "common/reset.min.css";
+  @import "assets/css/base.css";
+  @import "assets/css/iconfont.css";
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
+  #app {
+    margin: auto;
+    max-width: 640px;
+    height: 100%;
+    background: #fafafa;
+  }
 </style>

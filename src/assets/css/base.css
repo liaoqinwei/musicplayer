@@ -1,0 +1,4 @@
+html, body {
+  font: 300 calc(.12rem / 1.5) -apple-system, sans-serif;
+  background: #fafafa;
+}
