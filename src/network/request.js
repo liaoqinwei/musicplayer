@@ -1,7 +1,7 @@
 let axios = require('axios')
 
 let instance = axios.create()
-instance.defaults.baseURL = 'http://152.136.147.123:9090'
+instance.defaults.baseURL = 'http://127.0.0.1:9090'
 instance.interceptors.request.use(res => {
   return res
 }, err => {

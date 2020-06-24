@@ -141,6 +141,7 @@
         let preSong = this.songList.find(item => item !== this.curSong && item.isCheck === true)
         if (preSong) preSong.isCheck = false;
         this.curSong.isCheck = true
+        this.isPlayer = true
 
         // 获取歌词
         this.getLyric(this.curSong.songmid)
