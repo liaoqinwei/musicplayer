@@ -39,7 +39,7 @@
 </template>
 
 <script>
-  import {getTopDistance} from "assets/utils";
+  import {getTopDistance} from "common/utils";
   import parseLyric from "mixins/parseLyric";
 
   import {getLyric} from 'network/song'

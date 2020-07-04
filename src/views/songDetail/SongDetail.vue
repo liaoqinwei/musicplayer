@@ -67,7 +67,6 @@
         getComment(id).then(result => {
           this.commentData = result
         })
-        console.log(111)
       }
     }
   }

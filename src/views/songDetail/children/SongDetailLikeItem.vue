@@ -1,5 +1,5 @@
 <template>
-  <li class="lick-item" @click="lickSongClick">
+  <li class="lick-item" @click.stop="lickSongClick">
     <div class="head-box">
       <img :src="getRealPath(150,descData.album.pmid)" class="head">
     </div>
@@ -27,11 +27,8 @@
     },
     methods: {
       lickSongClick() {
+        console.log(this.descData.id)
         this.$router.replace('/songdetail/' + this.descData.id)
-      }
-    },
-    watch: {
-      '$route'(to, from) {
         this.$bus.$emit('updateData', this.descData.id)
       }
     }
@@ -78,6 +75,7 @@
     white-space: nowrap;
     font-size: .12rem;
     font-weight: normal;
+    max-width: 2.11rem;
   }
 
   .singer {

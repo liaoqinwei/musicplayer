@@ -56,7 +56,7 @@
 
   import {getLyric} from "network/song"
 
-  import {getPreviousHeight} from 'assets/utils'
+  import {getPreviousHeight} from 'common/utils'
 
   export default {
     name: "SongDetailBanner",

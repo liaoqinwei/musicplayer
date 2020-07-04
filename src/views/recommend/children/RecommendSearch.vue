@@ -38,7 +38,7 @@
 <script>
   import {getSearch} from 'network/search'
   import singerAanPath from "mixins/singerAanPath";
-  import {throttle} from "assets/utils";
+  import {throttle} from "common/utils";
 
   export default {
     name: "RecommendSearch",
