@@ -34,7 +34,7 @@
     },
     methods: {
       rakingClick() {
-        this.$router.push('rakinglist/'+this.rakingData.topId)
+        this.$router.push('/player/rakinglist/'+this.rakingData.topId)
       }
     }
   }

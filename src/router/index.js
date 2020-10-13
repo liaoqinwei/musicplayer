@@ -11,31 +11,31 @@ const Recommend = () => import('views/recommend/Recommend'),
 
 const routes = [
   {
-    path: '/',
-    redirect: '/recommend'
+    path: '/player',
+    redirect: '/player/recommend'
   },
   {
-    path: '/recommend',
+    path: '/player/recommend',
     component: Recommend
   },
   {
-    path: '/tolist',
+    path: '/player/tolist',
     component: ToList
   },
   {
-    path: '/officialDetail/:id',
+    path: '/player/officialDetail/:id',
     component: OfficialSongListDetail
   },
   {
-    path: '/detail/:id',
+    path: '/player/detail/:id',
     component: NormalSongListDetail
   },
   {
-    path: '/songdetail/:id',
+    path: '/player/songdetail/:id',
     component: SongDetail
   },
   {
-    path: '/rakinglist/:id',
+    path: '/player/rakinglist/:id',
     component: NormalSongListDetail
   }
 

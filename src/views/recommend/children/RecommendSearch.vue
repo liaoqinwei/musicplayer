@@ -132,7 +132,7 @@
       },
       /*跳转页面*/
       songClick(id) {
-        this.$router.push('/songdetail/' + id)
+        this.$router.push('/player/songdetail/' + id)
       },
       /* 清空状态 */
       clearStatus() {

@@ -40,9 +40,9 @@
     methods: {
       clickToDetail(id) {
         if (this.title === '官方歌单') {
-          this.$router.push('officialDetail/' + id)
+          this.$router.push('/player/officialDetail/' + id)
         } else {
-          this.$router.push('detail/'+id)
+          this.$router.push('/player/detail/'+id)
         }
       }
     }

@@ -28,7 +28,7 @@
     methods: {
       lickSongClick() {
         console.log(this.descData.id)
-        this.$router.replace('/songdetail/' + this.descData.id)
+        this.$router.replace('/player/songdetail/' + this.descData.id)
         this.$bus.$emit('updateData', this.descData.id)
       }
     }
