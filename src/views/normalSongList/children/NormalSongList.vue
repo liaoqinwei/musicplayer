@@ -46,7 +46,7 @@
         this.limit += 10
       },
       songClick(id) {
-        this.$router.push('/songdetail/' + id)
+        this.$router.push('/player/songdetail/' + id)
       },
       parseData(data) {
         let path = this.$router.history.current.path;
