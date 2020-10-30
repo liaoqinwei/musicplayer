@@ -150,6 +150,7 @@
         }
       },
     },
+    //  页面销毁关闭定时器
     destroyed() {
       clearTimeout(this.autoTimer)
     },

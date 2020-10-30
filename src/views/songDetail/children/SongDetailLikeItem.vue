@@ -29,7 +29,10 @@
       lickSongClick() {
         console.log(this.descData.id)
         this.$router.replace('/songdetail/' + this.descData.id)
-        this.$bus.$emit('updateData', this.descData.id)
+        // 刷新页面
+        window.location.href = window.location.href
+        // 以前的方法 bug ：播放的音乐不会变，使用刷新的方式来更新
+        // this.$bus.$emit('updateData', this.descData.id)
       }
     }
   }

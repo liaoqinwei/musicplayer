@@ -1,7 +1,7 @@
 let axios = require('axios')
 
 let instance = axios.create()
-instance.defaults.baseURL = 'https://lqwlsr.cn/player'
+instance.defaults.baseURL = 'https://lqwlsr.cn/api/music/'
 instance.interceptors.request.use(res => {
   return res
 }, err => {
