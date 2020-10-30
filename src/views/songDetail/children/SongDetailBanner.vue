@@ -100,7 +100,7 @@
               this.isHaveLyric = this.parseLyric(this.lyric.lyric);
             })
             // 播放音乐
-            let url = `http://152.136.147.123:9090/song?id=${this.songDesc.track_info.mid}`;
+            let url = `https://lqwlsr.cn/api/music/song?id=${this.songDesc.track_info.mid}`;
             this.$refs.myVideo.src = url
           }
 
