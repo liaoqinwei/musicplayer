@@ -55,12 +55,14 @@
       })
     },
     mounted() {
+      // 废弃 Discard
       this.$bus.$on('updateData', (id) => {
         this.updateData(id)
       })
     },
     methods: {
       updateData(id) {
+
         getSongDesc(id).then(result => {
           this.songDetail = result
         })

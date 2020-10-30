@@ -121,6 +121,7 @@
       },
       playDown(){
         this.playing = false
+        this.$refs.playMark.className = 'iconfont icon-bofang11' // 播放结束 更改图标
       },
       /* 歌词追踪 */
       lyricTrack() {
@@ -150,6 +151,7 @@
         }
       },
     },
+    //  页面销毁关闭定时器
     destroyed() {
       clearTimeout(this.autoTimer)
     },
