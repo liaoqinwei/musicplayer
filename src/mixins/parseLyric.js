@@ -30,17 +30,26 @@ export default {
       this.checkLyric = true
       return true;
     },
+    // 解析时间的格式
     parseTime(time) {
       time = time.split(':')
       let minutes = Number(time[0]),
           seconds = Number(time[1]).toFixed(0);
       return (minutes * 60 + seconds * 1)
     },
+    startLyricMonitor(){
+      this.autoTimer = setInterval(this.lyricTrack, 500)
+    },
+    closeLyricMonitor(){
+      clearTimeout(this.autoTimer)
+    }
+
   },
+
   watch: {
     isHaveLyric: function () {
       if (this.isHaveLyric) {
-        this.autoTimer = setInterval(this.lyricTrack, 500)
+        this.startLyricMonitor()
       }
     }
   }
