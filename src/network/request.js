@@ -1,7 +1,7 @@
 let axios = require('axios')
 
 let instance = axios.create()
-instance.defaults.baseURL = 'https://lqwlsr.cn/api/music/'
+instance.defaults.baseURL = 'http://152.136.147.123/api/music'
 instance.interceptors.request.use(res => {
   console.log('发送了请求')
   return res
