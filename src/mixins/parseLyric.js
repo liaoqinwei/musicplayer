@@ -38,12 +38,12 @@ export default {
       return (minutes * 60 + seconds * 1)
     },
     startLyricMonitor(){
-      this.autoTimer = setInterval(this.lyricTrack, 500)
+      if(this.autoTimer)this.closeLyricMonitor()
+      this.autoTimer = setInterval(this.lyricTrack, 100)
     },
     closeLyricMonitor(){
       clearTimeout(this.autoTimer)
     }
-
   },
 
   watch: {
